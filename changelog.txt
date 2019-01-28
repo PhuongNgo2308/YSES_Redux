@@ -1,8 +1,0 @@
-
-day 7-8-2018
-  + re-name constant, globally configs files
-
-day 8-8-2018
-  + add SignIn view, all features (validations, sign user in)
-  + update SignUp view, now actually create new user
-  + Fb console: restrict new user quotas/ per IP to 2

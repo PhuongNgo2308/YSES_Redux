@@ -1,14 +1,21 @@
-// common components
 import React from "react";
 import { render } from "react-dom";
+import { Provider } from "react-redux";
 
-// services
-//import * as firebase from "./services/firebase";
-//import * as firebaseAuth from "./services/firebase.auth";
+//import store from "store";
+import App from "./app";
+import store from "./store";
 
-// custom views
-import NewApp from "./views/App/NewApp";
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
 
-render(<NewApp />, document.getElementById("root"));
+// import { createStore } from "redux";
+// import rootReducer from "reducers/rdc.index";
 
-//export { firebase, firebaseAuth };
+// const store = createStore(rootReducer);
+
+// export default store;
