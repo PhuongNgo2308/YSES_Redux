@@ -1,7 +1,4 @@
-import {
-  LOGIN_REQUEST,
-  CLEAR_USER_EMAIL_PWD
-} from "../constants/const.actionTypes";
+import { LOGIN_REQUEST, CLEAR_USER_EMAIL_PWD } from "../constants/ActionTypes";
 
 const INITIAL_STATE = {
   email: "",
@@ -18,24 +15,13 @@ const login = (state = INITIAL_STATE, action) => {
         enteredUserData: {
           email: email,
           password: password
-        },
-        currentUserData: {
-          email: email,
-          password: password,
-          uid: 1,
-          displayName: "user one"
         }
       };
 
     case CLEAR_USER_EMAIL_PWD:
       return {
         ...state,
-        enteredUserData: INITIAL_STATE,
-        currentUserData: {
-          ...INITIAL_STATE,
-          uid: null,
-          displayName: null
-        }
+        enteredUserData: INITIAL_STATE
       };
 
     default:
