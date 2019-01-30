@@ -1,6 +1,7 @@
+// THIRD PARTIES IMPORT
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { doLogin } from "../actions/login";
 import classNames from "classnames";
 
 import {
@@ -9,56 +10,28 @@ import {
   TextField,
   Typography,
   Button,
-  Icon,
-  Grid,
-  Paper
+  Paper,
+  Avatar,
+  FormControl
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import DeleteIcon from "@material-ui/icons/Delete";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import { unstable_Box as Box } from "@material-ui/core/Box";
 
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { withStyles } from "@material-ui/core/styles";
 import {
-  withStyles,
-  MuiThemeProvider,
-  createMuiTheme
-} from "@material-ui/core/styles";
+  Visibility,
+  VisibilityOff,
+  Delete,
+  PlayArrow,
+  LockOutlined
+} from "@material-ui/icons";
 
-const styles = theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    flexGrow: 1
-  },
-  margin: {
-    margin: theme.spacing.unit
-  },
-  textField: {
-    flexBasis: 200
-  },
-  button: {
-    margin: theme.spacing.unit * 2
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  iconSmall: {
-    fontSize: 20
-  }
-});
+// import DeleteIcon from "@material-ui/icons/Delete";
+// import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+// import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#689f38"
-    },
-    secondary: {
-      main: "#43a047"
-    },
-    typography: { useNextVariants: true }
-  }
-});
-// const myPrime = green.A200;
+// INTERNAL IMPORT
+import styles from "./Login.style";
+import { doLogin } from "../actions/login";
 
 class Login extends Component {
   state = {
@@ -67,6 +40,7 @@ class Login extends Component {
     showPassword: false,
     classes: styles
   };
+  emailInput = React.createRef();
 
   handleSubmit = e => {
     const text = e.target.value.trim();
@@ -86,6 +60,17 @@ class Login extends Component {
     this.setState({ ...this.state, password: e.target.value });
   };
 
+  clearInput = e => {
+    this.setState({
+      ...this.state,
+      email: "",
+      password: "",
+      showPassword: false
+    });
+
+    this.emailInput.current.focus();
+  };
+
   handleClickShowPassword = e => {
     this.setState({
       ...this.state,
@@ -94,39 +79,45 @@ class Login extends Component {
   };
 
   render() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <div className={this.state.classes.root}>
-          <Grid container spacing={24}>
-            <Grid item xs={12}>
-              <Typography variant="caption" gutterBottom>
-                Please login to continue
-              </Typography>
-            </Grid>
+    const { classes } = this.props;
 
-            <Grid item xs={12}>
+    return (
+      <div className={classes.container}>
+        <CssBaseline />
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlined />
+          </Avatar>
+
+          <Typography component="h1" variant="h5">
+            Please login to continue
+          </Typography>
+
+          <form className={classes.form}>
+            <FormControl margin="normal" required fullWidth>
               <TextField
                 id="email"
                 label="Email"
-                className={this.state.classes.email}
+                variant="outlined"
                 type="email"
                 name="email"
                 autoComplete="email"
-                margin="normal"
-                variant="outlined"
                 autoFocus
+                required
                 value={this.state.email}
                 onChange={this.changeEmail}
-                required
+                className={this.state.classes.email}
+                inputRef={this.emailInput}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </FormControl>
+
+            <FormControl margin="normal" required fullWidth>
               <TextField
                 id="password"
-                className={this.state.classes.password}
-                variant="outlined"
-                type={this.state.showPassword ? "text" : "password"}
                 label="Password"
+                variant="outlined"
+                required
+                type={this.state.showPassword ? "text" : "password"}
                 value={this.state.password}
                 onChange={this.changePassword}
                 InputProps={{
@@ -145,43 +136,33 @@ class Login extends Component {
                     </InputAdornment>
                   )
                 }}
-                required
               />
-            </Grid>
+            </FormControl>
 
-            <Grid item xs={12}>
-              <Box display="inline" mr={2}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  className={this.state.classes.button}
-                  color="primary"
-                  onClick={this.handleSubmit}
-                >
-                  Login
-                  <PlayArrowIcon className={this.state.classes.rightIcon} />
-                </Button>
-              </Box>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.handleSubmit}
+            >
+              Sign in
+              <PlayArrow className={classes.rightIcon} />
+            </Button>
 
-              <Box display="inline">
-                <Button
-                  variant="contained"
-                  size="small"
-                  className={this.state.classes.button}
-                >
-                  Clear all
-                  <DeleteIcon
-                    className={classNames(
-                      this.state.classes.rightIcon,
-                      this.state.classes.iconSmall
-                    )}
-                  />
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </div>
-      </MuiThemeProvider>
+            <Button
+              fullWidth
+              variant="contained"
+              className={classes.reset}
+              onClick={this.clearInput}
+            >
+              Clear all
+              <Delete className={classNames(classes.rightIcon)} />
+            </Button>
+          </form>
+        </Paper>
+      </div>
     );
   }
 }
