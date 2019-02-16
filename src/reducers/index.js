@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import login from "../reducers/login";
+import loginReducer from "../reducers/loginReducer";
+import handleDataReducer from "../reducers/handleDataReducer";
 
-const rootReducer = combineReducers({ login });
-
-export default rootReducer;
+export default combineReducers({
+  uiLoginForm: loginReducer,
+  uiHandleDataForm: handleDataReducer
+});

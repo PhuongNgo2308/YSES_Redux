@@ -1,6 +1,5 @@
 // THIRD PARTIES IMPORT
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import classNames from "classnames";
 
@@ -30,45 +29,50 @@ import {
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 // INTERNAL IMPORT
-import styles from "./Login.style";
-import { doLogin } from "../actions/login";
+import styles from "../style/login";
+import { beginLogin, clearAll } from "../actions/loginActions";
 
 class Login extends Component {
   state = {
-    email: this.props.email || "",
-    password: this.props.password || "",
-    showPassword: false,
+    input: {
+      email: this.props.email || "",
+      password: this.props.password || ""
+    },
+
+    showPassword: this.props.showPassword,
     classes: styles
   };
   emailInput = React.createRef();
 
   handleSubmit = e => {
-    const text = e.target.value.trim();
-    if (e.which === 13) {
-      this.props.onSave(text);
-      if (this.props.newTodo) {
-        this.setState({ text: "" });
-      }
-    }
+    this.props.beginLogin(this.state.input.email, this.state.input.password);
   };
 
   changeEmail = e => {
-    this.setState({ ...this.state, email: e.target.value });
+    this.setState({
+      ...this.state,
+      input: { ...this.state.input, email: e.target.value }
+    });
   };
 
   changePassword = e => {
-    this.setState({ ...this.state, password: e.target.value });
+    this.setState({
+      ...this.state,
+      input: { ...this.state.input, password: e.target.value }
+    });
   };
 
   clearInput = e => {
+    this.props.clearAll();
+
     this.setState({
       ...this.state,
-      email: "",
-      password: "",
+      input: {
+        email: "",
+        password: ""
+      },
       showPassword: false
     });
-
-    this.emailInput.current.focus();
   };
 
   handleClickShowPassword = e => {
@@ -89,9 +93,7 @@ class Login extends Component {
             <LockOutlined />
           </Avatar>
 
-          <Typography component="h1" variant="h5">
-            Please login to continue
-          </Typography>
+          <Typography variant="button">Please login to continue</Typography>
 
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
@@ -99,12 +101,12 @@ class Login extends Component {
                 id="email"
                 label="Email"
                 variant="outlined"
-                type="email"
                 name="email"
+                type="email"
                 autoComplete="email"
                 autoFocus
                 required
-                value={this.state.email}
+                value={this.state.input.email}
                 onChange={this.changeEmail}
                 className={this.state.classes.email}
                 inputRef={this.emailInput}
@@ -116,9 +118,10 @@ class Login extends Component {
                 id="password"
                 label="Password"
                 variant="outlined"
+                name="password"
                 required
                 type={this.state.showPassword ? "text" : "password"}
-                value={this.state.password}
+                value={this.state.input.password}
                 onChange={this.changePassword}
                 InputProps={{
                   endAdornment: (
@@ -128,9 +131,9 @@ class Login extends Component {
                         onClick={this.handleClickShowPassword}
                       >
                         {this.state.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
                           <Visibility />
+                        ) : (
+                          <VisibilityOff />
                         )}
                       </IconButton>
                     </InputAdornment>
@@ -140,7 +143,6 @@ class Login extends Component {
             </FormControl>
 
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="primary"
@@ -167,9 +169,19 @@ class Login extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  const { email, password, showPassword } = state.uiLoginForm;
+
+  return {
+    email: email,
+    password: password,
+    showPassword: showPassword
+  };
+};
+
 export default withStyles(styles)(
   connect(
-    null,
-    { doLogin }
+    mapStateToProps,
+    { beginLogin, clearAll }
   )(Login)
 );

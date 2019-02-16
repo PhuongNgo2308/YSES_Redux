@@ -10,11 +10,11 @@ import store from "./store";
 import theme from "./style/theme";
 
 const WiredApp = () => (
-  <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
       <App />
-    </Provider>
-  </MuiThemeProvider>
+    </MuiThemeProvider>
+  </Provider>
 );
 
 const rootElm = document.getElementById("root");
