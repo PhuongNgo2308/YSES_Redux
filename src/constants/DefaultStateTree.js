@@ -7,7 +7,7 @@ const DEFAULT_STATE = {
   uiLoginForm: {
     email: "",
     password: "",
-    showPassword: false
+    isShowPassword: false
   }
 };
 

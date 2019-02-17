@@ -1,5 +1,4 @@
-import firebase from "../services/firebase";
-import "firebase/firestore";
+import firebase from "../services/fb.init";
 
 const auth = firebase.auth();
 

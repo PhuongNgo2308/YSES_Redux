@@ -1,6 +1,5 @@
 // import firebase modules
 import firebase from "firebase";
-import "firebase/firestore";
 
 // import { ENV } from "../global/CONFIG";
 

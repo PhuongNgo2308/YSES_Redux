@@ -31,55 +31,64 @@ import {
 // INTERNAL IMPORT
 import styles from "../style/login";
 import { beginLogin, clearAll } from "../actions/loginActions";
+import * as API from "../services/fb.services";
 
 class Login extends Component {
   state = {
-    input: {
-      email: this.props.email || "",
-      password: this.props.password || ""
-    },
-
-    showPassword: this.props.showPassword,
+    email: this.props.email || "",
+    password: this.props.password || "",
+    isShowPassword: this.props.isShowPassword,
     classes: styles
   };
   emailInput = React.createRef();
 
   handleSubmit = e => {
-    this.props.beginLogin(this.state.input.email, this.state.input.password);
+    const { email, password, isShowPassword } = this.state;
+
+    this.props.beginLogin(email, password, isShowPassword);
+
+    // API.signIn;
+    // FB.SignIn(email, password)
+    //   .then(authUser => {
+    //     this.setState(() => ({ ...INITIAL_STATE, user: authUser }));
+    //   })
+    //   .catch(error => {
+    //     this.setState(byPropKey("error", error));
+    //   });
   };
 
   changeEmail = e => {
-    this.setState({
-      ...this.state,
-      input: { ...this.state.input, email: e.target.value }
-    });
+    let newEmail = e.target.value;
+
+    this.setState(prevState => ({
+      email: newEmail
+    }));
   };
 
   changePassword = e => {
-    this.setState({
-      ...this.state,
-      input: { ...this.state.input, password: e.target.value }
-    });
+    let newPwd = e.target.value;
+
+    this.setState(prevState => ({
+      password: newPwd
+    }));
   };
 
   clearInput = e => {
     this.props.clearAll();
 
-    this.setState({
-      ...this.state,
-      input: {
-        email: "",
-        password: ""
-      },
+    this.setState(prevState => ({
+      email: "",
+      password: "",
       showPassword: false
-    });
+    }));
+
+    this.emailInput.current.focus();
   };
 
-  handleClickShowPassword = e => {
-    this.setState({
-      ...this.state,
-      showPassword: !this.state.showPassword
-    });
+  handleClickShowPassword = () => {
+    this.setState(prevState => ({
+      isShowPassword: !prevState.isShowPassword
+    }));
   };
 
   render() {
@@ -106,7 +115,7 @@ class Login extends Component {
                 autoComplete="email"
                 autoFocus
                 required
-                value={this.state.input.email}
+                value={this.state.email}
                 onChange={this.changeEmail}
                 className={this.state.classes.email}
                 inputRef={this.emailInput}
@@ -120,8 +129,8 @@ class Login extends Component {
                 variant="outlined"
                 name="password"
                 required
-                type={this.state.showPassword ? "text" : "password"}
-                value={this.state.input.password}
+                type={this.state.isShowPassword ? "text" : "password"}
+                value={this.state.password}
                 onChange={this.changePassword}
                 InputProps={{
                   endAdornment: (
@@ -130,7 +139,7 @@ class Login extends Component {
                         aria-label="Toggle password visibility"
                         onClick={this.handleClickShowPassword}
                       >
-                        {this.state.showPassword ? (
+                        {this.state.isShowPassword ? (
                           <Visibility />
                         ) : (
                           <VisibilityOff />
@@ -170,12 +179,12 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  const { email, password, showPassword } = state.uiLoginForm;
+  const { email, password, isShowPassword } = state.uiLoginForm;
 
   return {
     email: email,
     password: password,
-    showPassword: showPassword
+    isShowPassword: isShowPassword
   };
 };
 

@@ -4,10 +4,17 @@ import DEFAULT_STATE from "../constants/DefaultStateTree";
 const loginReducer = (state = DEFAULT_STATE.uiLoginForm, action) => {
   switch (action.type) {
     case ACTIONS.LOGIN_REQUEST_BEGIN:
+      const { email, password, isShowPassword } = action.payload;
+
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
+        uiLoginForm: {
+          email: email,
+          password: password,
+          isShowPassword: isShowPassword
+        }
       };
 
     // case ACTIONS.LOGIN_REQUEST_SUCCESS:

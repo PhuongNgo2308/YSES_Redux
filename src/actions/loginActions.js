@@ -1,10 +1,11 @@
 import * as ACTION_TYPE from "../constants/ActionTypes";
 
-export const beginLogin = (email, password) => ({
+export const beginLogin = (email, password, isShowPassword) => ({
   type: ACTION_TYPE.LOGIN_REQUEST_BEGIN,
   payload: {
     email,
-    password
+    password,
+    isShowPassword
   }
 });
 
